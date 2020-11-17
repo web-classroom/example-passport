@@ -1,0 +1,9 @@
+<% if (!user) { %>
+<p>Welcome!</p>
+<p>Please <a href="/login">log in</a> with account.</p>
+<p>Or login with <a href="/auth/github">github</a>.</p>
+<% } else { %>
+<p><b>Menu:</b> <a href="/withdraw">withdraw</a> | <a href="/logout">logout</a></p>
+<p>Welcome, <%= user.username %>!</p>
+<p>Your balance is <%= balance %> CHF.</p>
+<% } %>

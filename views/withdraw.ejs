@@ -1,0 +1,10 @@
+<form action="/withdraw" method="post">
+	<input type="hidden" name="_csrf" value="<%= csrfToken %>">
+	<p>
+		<label>Amount:</label>
+		<input type="text" name="amount" /><br />
+    </p>
+	<p>
+		<input type="submit" value="Withdraw" />
+    </p>
+</form>
