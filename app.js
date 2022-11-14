@@ -5,7 +5,6 @@ var path = require('path');
 var passport = require('passport');
 var Strategy = require('passport-local').Strategy;
 var GitHubStrategy = require('passport-github2').Strategy;
-var csrf = require('csurf')
 
 var cookieParser = require('cookie-parser')
 
@@ -31,7 +30,6 @@ passport.deserializeUser(function (username, done) {
 // Application
 var app = express();
 
-
 // View engine
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -44,7 +42,6 @@ app.use(cookieParser())
 app.use(session({ secret: 'secret', resave: false, saveUninitialized: false }));
 app.use(passport.initialize());
 app.use(passport.session());
-app.use('/withdraw', csrf({ cookie: true }));
 
 // Routes
 var accounts = new Map();
@@ -69,8 +66,7 @@ app.post('/login', passport.authenticate('local', { failureRedirect: '/login' })
 });
 
 app.get('/logout', function (req, res) {
-  req.logout();
-  res.redirect('/');
+  req.logout(() => { res.redirect('/') });
 });
 
 // Restricted access
@@ -83,7 +79,7 @@ function loggedIn(req, res, next) {
 }
 
 app.get('/withdraw', loggedIn, function (req, res) {
-  res.render('withdraw', { csrfToken: req.csrfToken() });
+  res.render('withdraw');
 });
 
 app.post('/withdraw', loggedIn, function (req, res) {
@@ -102,7 +98,6 @@ passport.use(new GitHubStrategy(
     callbackURL: "http://127.0.0.1:3000/auth/github/callback"
   },
   function (accessToken, refreshToken, profile, done) {
-    console.log(done);
     done(null, profile);
   }
 ));
